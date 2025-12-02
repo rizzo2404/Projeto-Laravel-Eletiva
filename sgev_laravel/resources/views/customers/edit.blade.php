@@ -1,24 +1,25 @@
 @extends('layouts.app')
 
 @section('content')
-<h2>Novo Cliente</h2>
+<h2>Editar Cliente</h2>
 
-<form action="{{ route('customers.store') }}" method="POST">
+<form action="{{ route('customers.update', $customer) }}" method="POST">
     @csrf
+    @method('PUT')
 
     <div class="mb-3">
         <label class="form-label">Nome</label>
-        <input type="text" name="name" class="form-control" required>
+        <input type="text" name="name" class="form-control" value="{{ $customer->name }}" required>
     </div>
 
     <div class="mb-3">
         <label class="form-label">Email</label>
-        <input type="email" name="email" class="form-control">
+        <input type="email" name="email" class="form-control" value="{{ $customer->email }}">
     </div>
 
     <div class="mb-3">
         <label class="form-label">Telefone</label>
-        <input type="text" name="phone" class="form-control">
+        <input type="text" name="phone" class="form-control" value="{{ $customer->phone }}">
     </div>
 
     <button class="btn btn-primary">Salvar</button>

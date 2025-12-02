@@ -1,22 +1,28 @@
 @extends('layouts.app')
-@section('title','Pedido')
+
 @section('content')
-<h1>Pedido #{{ $order->id }}</h1>
-<p><strong>Cliente:</strong> {{ $order->customer?->name ?? '---' }}</p>
-<p><strong>Total:</strong> {{ number_format($order->total,2,',','.') }}</p>
-<p><strong>Status:</strong> {{ $order->status }}</p>
-<h4>Itens</h4>
-<table class="table">
-  <thead><tr><th>Produto</th><th>Quantidade</th><th>Preço Unit.</th></tr></thead>
-  <tbody>
-  @foreach($order->items as $it)
-    <tr>
-      <td>{{ $it->product?->name }}</td>
-      <td>{{ $it->quantity }}</td>
-      <td>{{ number_format($it->unit_price,2,',','.') }}</td>
-    </tr>
-  @endforeach
-  </tbody>
-</table>
-<a href="{{ route('orders.index') }}" class="btn btn-secondary">Voltar</a>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Pedido #{{ $order->id }}</h2>
+    <a href="{{ route('orders.index') }}" class="btn btn-secondary">Voltar</a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+
+        <p><strong>Cliente:</strong> {{ $order->customer->name }}</p>
+
+        <p><strong>Data:</strong>
+            {{ $order->created_at->format('d/m/Y H:i') }}
+        </p>
+
+        <p><strong>Total:</strong>
+            R$ {{ number_format($order->total, 2, ',', '.') }}
+        </p>
+
+    </div>
+</div>
+
+<a href="{{ route('orders.edit', $order) }}" class="btn btn-warning mt-3">Editar</a>
+
 @endsection

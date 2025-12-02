@@ -1,27 +1,48 @@
 @extends('layouts.app')
-@section('title','Pedidos')
+
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-3">
-  <h1>Pedidos</h1>
-  <a href="{{ route('orders.create') }}" class="btn btn-primary">Novo pedido</a>
+    <h2>Pedidos</h2>
+    <a href="{{ route('orders.create') }}" class="btn btn-primary">Novo Pedido</a>
 </div>
-<table class="table">
-  <thead><tr><th>ID</th><th>Cliente</th><th>Total</th><th>Status</th><th>Data</th><th>Ações</th></tr></thead>
-  <tbody>
-  @foreach($orders as $o)
-    <tr>
-      <td>{{ $o->id }}</td>
-      <td>{{ $o->customer?->name }}</td>
-      <td>{{ number_format($o->total,2,',','.') }}</td>
-      <td>{{ $o->status }}</td>
-      <td>{{ $o->created_at->format('d/m/Y H:i') }}</td>
-      <td>
-        <a class="btn btn-sm btn-info" href="{{ route('orders.show',$o) }}">Ver</a>
-        <form action="{{ route('orders.destroy',$o) }}" method="POST" style="display:inline">@csrf @method('DELETE')<button class="btn btn-sm btn-danger" onclick="return confirm('Excluir?')">Excluir</button></form>
-      </td>
-    </tr>
-  @endforeach
-  </tbody>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-light">
+        <tr>
+            <th>ID</th>
+            <th>Cliente</th>
+            <th>Data</th>
+            <th>Total</th>
+            <th width="180">Ações</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach($orders as $order)
+        <tr>
+            <td>{{ $order->id }}</td>
+            <td>{{ $order->customer->name }}</td>
+            <td>{{ $order->created_at->format('d/m/Y H:i') }}</td>
+            <td>R$ {{ number_format($order->total, 2, ',', '.') }}</td>
+
+            <td>
+                <a href="{{ route('orders.show', $order) }}" class="btn btn-sm btn-secondary">Ver</a>
+                <a href="{{ route('orders.edit', $order) }}" class="btn btn-sm btn-warning">Editar</a>
+
+                <form action="{{ route('orders.destroy', $order) }}" method="POST" class="d-inline">
+                    @csrf
+                    @method('DELETE')
+
+                    <button class="btn btn-sm btn-danger" onclick="return confirm('Excluir este pedido?')">
+                        Excluir
+                    </button>
+                </form>
+            </td>
+
+        </tr>
+        @endforeach
+    </tbody>
 </table>
+
 {{ $orders->links() }}
 @endsection

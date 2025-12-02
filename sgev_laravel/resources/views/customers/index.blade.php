@@ -1,32 +1,39 @@
-@extends('layout')
+@extends('layouts.app')
 
 @section('content')
-<div class="d-flex justify-content-between mb-3">
+<div class="d-flex justify-content-between align-items-center mb-3">
     <h2>Clientes</h2>
-    <a href="{{ route('customers.create') }}" class="btn btn-primary">Novo</a>
+    <a href="{{ route('customers.create') }}" class="btn btn-primary">Novo Cliente</a>
 </div>
 
-<table class="table">
-    <thead>
+<table class="table table-bordered table-striped">
+    <thead class="table-light">
         <tr>
             <th>Nome</th>
             <th>Email</th>
             <th>Telefone</th>
-            <th>Ações</th>
+            <th width="220">Ações</th>
         </tr>
     </thead>
+
     <tbody>
-        @foreach($customers as $item)
+        @foreach($customers as $customer)
         <tr>
-            <td>{{ $item->name }}</td>
-            <td>{{ $item->email }}</td>
-            <td>{{ $item->phone }}</td>
+            <td>{{ $customer->name }}</td>
+            <td>{{ $customer->email ?? '—' }}</td>
+            <td>{{ $customer->phone ?? '—' }}</td>
+
             <td>
-                <a class="btn btn-sm btn-warning" href="{{ route('customers.edit', $item) }}">Editar</a>
-                <form action="{{ route('customers.destroy', $item) }}" method="POST" style="display:inline">
-                    @csrf 
+                <a href="{{ route('customers.show', $customer) }}" class="btn btn-sm btn-secondary">Ver</a>
+                <a href="{{ route('customers.edit', $customer) }}" class="btn btn-sm btn-warning">Editar</a>
+
+                <form action="{{ route('customers.destroy', $customer) }}" method="POST" class="d-inline">
+                    @csrf
                     @method('DELETE')
-                    <button class="btn btn-sm btn-danger" onclick="return confirm('Excluir?')">Excluir</button>
+
+                    <button class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja excluir?')">
+                        Excluir
+                    </button>
                 </form>
             </td>
         </tr>
@@ -35,5 +42,4 @@
 </table>
 
 {{ $customers->links() }}
-
 @endsection

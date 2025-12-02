@@ -1,24 +1,43 @@
 @extends('layouts.app')
-@section('title','Categorias')
+
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-3">
-  <h1>Categorias</h1>
-  <a href="{{ route('categories.create') }}" class="btn btn-primary">Nova categoria</a>
+    <h2>Categorias</h2>
+    <a href="{{ route('categories.create') }}" class="btn btn-primary">Nova Categoria</a>
 </div>
-<table class="table">
-  <thead><tr><th>Nome</th><th>Ações</th></tr></thead>
-  <tbody>
-  @foreach($categories as $c)
-    <tr>
-      <td>{{ $c->name }}</td>
-      <td>
-        <a class="btn btn-sm btn-info" href="{{ route('categories.show',$c) }}">Ver</a>
-        <a class="btn btn-sm btn-warning" href="{{ route('categories.edit',$c) }}">Editar</a>
-        <form action="{{ route('categories.destroy',$c) }}" method="POST" style="display:inline">@csrf @method('DELETE')<button class="btn btn-sm btn-danger" onclick="return confirm('Excluir?')">Excluir</button></form>
-      </td>
-    </tr>
-  @endforeach
-  </tbody>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-light">
+        <tr>
+            <th>Nome</th>
+            <th>Descrição</th>
+            <th width="220">Ações</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach($categories as $category)
+        <tr>
+            <td>{{ $category->name }}</td>
+            <td>{{ $category->description ?? '—' }}</td>
+
+            <td>
+                <a href="{{ route('categories.show', $category) }}" class="btn btn-sm btn-secondary">Ver</a>
+                <a href="{{ route('categories.edit', $category) }}" class="btn btn-sm btn-warning">Editar</a>
+
+                <form action="{{ route('categories.destroy', $category) }}" method="POST" class="d-inline">
+                    @csrf
+                    @method('DELETE')
+
+                    <button class="btn btn-sm btn-danger" onclick="return confirm('Excluir esta categoria?')">
+                        Excluir
+                    </button>
+                </form>
+            </td>
+        </tr>
+        @endforeach
+    </tbody>
 </table>
+
 {{ $categories->links() }}
 @endsection
